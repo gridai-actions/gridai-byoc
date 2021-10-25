@@ -1,0 +1,77 @@
+name: "Grid.ai BYOC"
+inputs:
+  cloud_provider:
+    required: false
+    default: aws
+    type: string    
+  cluster_name:
+    required: false
+    default: "c$(date '+%y%m%d-%H%M%S')"
+    type: string
+  cluster_region:
+    required: false
+    default: us-east-1
+    type: string
+  instance_types:
+    required: false
+    default: "t2.medium,t2.large"
+    type: string      
+  grid_args:
+    required: false
+    default: "--cost-savings"
+    type: string               
+# Grid.ai login in secrets
+  gridai_username:
+    required: true
+  gridai_key:
+    required: true
+# AWS login in secrets
+  aws_access_key_id:
+    required: true
+  aws_secret_access_key:
+    required: true
+outputs:
+  obj_id:
+    value: ${{ steps.obj_create.outputs.obj_status }}
+  obj_status:
+    value: ${{ steps.obj_create.outputs.obj_status }}
+  obj_exit_code:
+    value: ${{ steps.obj_create.outputs.exit_code }}    
+runs:
+  using: "composite"
+  steps:
+    - uses: robert-s-lee/gridai_action_login@v0
+      with:
+        username: ${{ inputs.gridai_username }} 
+        key: ${{ inputs.gridai_key }} 
+    - uses: aws-actions/setup-sam@v1
+    - uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ inputs.aws_access_key_id }}
+        aws-secret-access-key: ${{ inputs.aws_secret_access_key }}
+        aws-region: us-east-1         
+    - uses: hashicorp/setup-terraform@v1
+    - run: |
+        terraform init
+      shell: bash
+    - run: |
+        terraform apply -auto-approve
+        terraform output -json | tee tf.output.json
+        echo "" >> tf.output.json
+      shell: bash
+    - id: obj_create
+      run: |
+        # cluster name
+        export cluster_name=${{ inputs.cluster_name }}
+        # aws 
+        export EXTERNAL_ID=$(cat tf.output.json | tail -n +2 | jq -r '.external_id.value')
+        export ROLE_ARN=$(cat tf.output.json | tail -n +2 | jq -r '.role_arn.value')
+        if [ -z "${EXTERNAL_ID}" ]; then  echo "Error: EXTERNAL_ID is blank"; exit 1; fi
+        if [ -z "${ROLE_ARN}" ]; then     echo "Error: ROLE_ARN is blank"; exit 1; fi
+        # create cluster
+        cluster_status=$(grid clusters ${{ inputs.cloud_provider }} ${{ inputs.grid_args }} --role-arn ${ROLE_ARN} --external-id ${EXTERNAL_ID} --region ${{ inputs.cluster_region }} --instance-types ${{ inputs.instance_types }} ${cluster_name})
+        # setup exit codes
+        echo "::set-output name=obj_exit_code::$?"
+        echo "::set-output name=obj_id::${cluster_name}"
+        echo "::set-output name=obj_exit_code::${cluster_status}"
+      shell: bash
