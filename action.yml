@@ -78,7 +78,7 @@ runs:
       shell: bash
     - run: |
         terraform apply -auto-approve
-        terraform output -json 
+        terraform output -json > tf.output.json
       shell: bash
     - id: gridai-obj-create
       run: |
