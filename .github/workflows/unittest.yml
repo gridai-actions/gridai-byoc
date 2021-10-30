@@ -29,7 +29,7 @@ jobs:
       - id: gridai-obj-create
         uses: gridai-actions/gridai-byoc@main
         with:
-          gridai-args: ${{ matrix.byoc-cost-savings }} ${{ matrix.byoc-region }} ${{ byoc-instance-types }}
+          gridai-args: ${{ matrix.byoc-cost-savings }} ${{ matrix.byoc-region }} ${{ matrix.byoc-instance-types }}
           script-name: hello.py
 # TODO: perform a run
 # TODO: perform a session
