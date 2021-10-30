@@ -62,7 +62,7 @@ runs:
           echo "This script supports AWS only"
           exit 1
         fi
-        echo ${cloud_provider} >> $GITHUB_ENV
+        echo "cloud_provider=${cloud_provider}" >> $GITHUB_ENV
       shell: bash
     - uses: aws-actions/setup-sam@v1
     - uses: aws-actions/configure-aws-credentials@v1
@@ -85,7 +85,7 @@ runs:
       run: |
         # cluster name
         export obj_id=${{ inputs.cluster-name }}
-        echo obj_id=${obj_id} >> $GITHUB_ENV
+        echo "obj_id=${obj_id}" >> $GITHUB_ENV
         # aws 
         export EXTERNAL_ID=$(cat tf.output.json | tail -n +2 | jq -r '.external_id.value')
         export ROLE_ARN=$(cat tf.output.json | tail -n +2 | jq -r '.role_arn.value')
