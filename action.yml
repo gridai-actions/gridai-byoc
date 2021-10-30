@@ -78,12 +78,7 @@ runs:
       shell: bash
     - run: |
         terraform apply -auto-approve
-        terraform output -json | tee tf.output.json
-      shell: bash
-    - run: |
-        echo "*********" 
-        cat tf.output.json
-        echo "*********" 
+        terraform output -json 
       shell: bash
     - id: gridai-obj-create
       run: |
@@ -91,8 +86,8 @@ runs:
         export obj_id=${{ inputs.cluster-name }}
         echo "obj_id=${obj_id}" >> $GITHUB_ENV
         # aws 
-        export EXTERNAL_ID=$(cat tf.output.json | tail -n +2 | jq -r '.external_id.value')
-        export ROLE_ARN=$(cat tf.output.json | tail -n +2 | jq -r '.role_arn.value')
+        export EXTERNAL_ID=$(cat tf.output.json | jq -r '.external_id.value')
+        export ROLE_ARN=$(cat tf.output.json | jq -r '.role_arn.value')
         if [ -z "${EXTERNAL_ID}" ]; then  echo "Error: EXTERNAL_ID is blank"; exit 1; fi
         if [ -z "${ROLE_ARN}" ]; then     echo "Error: ROLE_ARN is blank"; exit 1; fi
         # create cluster
