@@ -56,7 +56,7 @@ outputs:
 runs:
   using: "composite"
   steps:
-    - run:
+    - run: |
         export cloud_provider=$(echo ${{ inputs.cloud-provider }} | tr '[:upper:]' '[:lower:]')
         if [ "${cloud_provider}" != "aws" ]; then
           echo "This script supports AWS only"

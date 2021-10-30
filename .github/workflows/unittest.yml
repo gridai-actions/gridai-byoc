@@ -29,8 +29,7 @@ jobs:
       - id: gridai-obj-create
         uses: gridai-actions/gridai-byoc@main
         with:
-          gridai-args: ${{ matrix.byoc-cost-savings }} ${{ matrix.byoc-region }} ${{ matrix.byoc-instance-types }}
-          script-name: hello.py
+          grid-args: ${{ matrix.byoc-cost-savings }} ${{ matrix.byoc-region }} ${{ matrix.byoc-instance-types }}
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}           
 # TODO: perform a run
