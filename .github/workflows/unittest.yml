@@ -30,9 +30,18 @@ jobs:
         uses: gridai-actions/gridai-byoc@main
         with:
           grid-args: ${{ matrix.byoc-cost-savings }} ${{ matrix.byoc-region }} ${{ matrix.byoc-instance-types }}
+          success-status: "[running|failed]"
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}           
 # TODO: perform a run
+      - uses: actions/checkout@v2     
+        with:
+          repository: robert-s-lee/hello
+      - uses: gridai-actions/gridai-run@main
+        with:
+          cluster-name: ${{ steps.gridai-obj-create.outputs.obj-id }}
+          script-dir: ${GITHUB_WORKSPACE}
+          script-name: hello.py
 # TODO: perform a session
 # TODO: perform a datastore
       - run:
