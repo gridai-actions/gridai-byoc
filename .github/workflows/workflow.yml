@@ -36,9 +36,13 @@ jobs:
           python-venv: ${{ matrix.python-venv }}
           gridai-username: ${{ secrets.gridai-username }} 
           gridai-key: ${{ secrets.gridai-key }}
+      - run:
+          export CLUSTER_NAME=c$(date '+%y%m%d-%H%M%S')    
+          echo "CLUSTER_NAME=$CLUSTER_NAME" >> $GITHUB_ENV
       - id: gridai-obj-create
         uses: gridai-actions/gridai-byoc@main
         with:
+          cluster-name: ${CLUSTER_NAME}
           grid-args: ${{ matrix.byoc-cost-savings }} ${{ matrix.byoc-region }} ${{ matrix.byoc-instance-types }}
           success-status: "[running|failed]"
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
