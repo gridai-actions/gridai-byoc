@@ -15,7 +15,7 @@ jobs:
         python-venv: [""] #,"venv"]
         byoc-cost-savings: ["--cost-savings"] #, ""]
         byoc-region: ["--region us-east-1"]       
-        byoc-instance-types: ["--instance-types t2.medium,t2.large"]       
+        byoc-instance-types: ["--instance-types t2.medium,g4dn.xlarge"]       
     runs-on: ${{ matrix.os }}
     timeout-minutes: 60 # takes about 20 min to create the cluster
     steps:
