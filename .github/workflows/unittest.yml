@@ -14,7 +14,7 @@ jobs:
         python-version: [3.8] #,3.9]       
         python-venv: [""] #,"venv"]
         byoc-cost-savings: ["--cost-savings"] #, ""]
-        byoc-region: ["--region us-east-1"]       
+        byoc-region: ["us-east-1"]       
         byoc-instance-types: ["--instance-types t2.medium,g4dn.xlarge"]       
     runs-on: ${{ matrix.os }}
     timeout-minutes: 60 # takes about 20 min to create the cluster
@@ -29,7 +29,8 @@ jobs:
       - id: gridai-obj-create
         uses: gridai-actions/gridai-byoc@main
         with:
-          grid-args: ${{ matrix.byoc-cost-savings }} ${{ matrix.byoc-region }} ${{ matrix.byoc-instance-types }}
+          byoc-region: ${{ matrix.byoc-region }}
+          grid-args: ${{ matrix.byoc-cost-savings }} ${{ matrix.byoc-instance-types }}
           success-status: "[running|failed]"
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}           

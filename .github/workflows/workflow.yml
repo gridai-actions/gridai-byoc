@@ -44,7 +44,7 @@ jobs:
         with:
           cluster-name: ${CLUSTER_NAME}
           byoc-region: ${{ matrix.byoc-region }}
-          grid-args: ${{ matrix.byoc-cost-savings }} ${{ matrix.byoc-region }} ${{ matrix.byoc-instance-types }}
+          grid-args: ${{ matrix.byoc-cost-savings }} ${{ matrix.byoc-instance-types }}
           success-status: "[running|failed]"
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}           
