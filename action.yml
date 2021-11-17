@@ -24,9 +24,12 @@ inputs:
     required: false
     default: gridai/terraform-aws-gridbyoc
     type: string
+  byoc-region:
+    required: false
+    default: us-east-1
   grid-args:
     required: false
-    default: "--cost-savings --region us-east-1 --instance-types t2.medium,t2.large"
+    default: "--cost-savings --instance-types t2.medium,t2.large"
     type: string    
     description: "Arguments to grid run command"                  
   success-status:
@@ -74,7 +77,7 @@ runs:
         cat ~/.aws/credentials
         cat ~/.aws/config
         exit 1
-      shell:bash    
+      shell: bash    
     - uses: actions/checkout@v2     
       with:
         repository: ${{ inputs.cloud-terraform-repo }}             
@@ -96,7 +99,7 @@ runs:
         if [ -z "${EXTERNAL_ID}" ]; then  echo "Error: EXTERNAL_ID is blank"; exit 1; fi
         if [ -z "${ROLE_ARN}" ]; then     echo "Error: ROLE_ARN is blank"; exit 1; fi
         # create cluster
-        cluster_status=$(grid clusters ${{ inputs.cloud-provider }} ${{ inputs.grid-args }} --role-arn ${ROLE_ARN} --external-id ${EXTERNAL_ID} ${obj_id})
+        cluster_status=$(grid clusters ${{ inputs.cloud-provider }} ${{ inputs.grid-args }} --byoc-region ${{ inputs.byoc-region }} --role-arn ${ROLE_ARN} --external-id ${EXTERNAL_ID} ${obj_id})
       shell: bash
     - id: gridai-obj-status
       uses: gridai-actions/gridai-status@main
