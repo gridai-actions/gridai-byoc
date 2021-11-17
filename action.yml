@@ -108,11 +108,11 @@ runs:
         if [ -z "${ROLE_ARN}" ]; then     echo "Error: ROLE_ARN is blank"; exit 1; fi
         # create cluster
 
-        python gridai.py cli "grid clusters ${{ inputs.cloud-provider }} ${{ inputs.grid-args }} --byoc-region ${{ inputs.byoc-region }} --role-arn ${ROLE_ARN} --external-id ${EXTERNAL_ID} ${obj_id}"
+        gridai.py cli "grid clusters ${{ inputs.cloud-provider }} ${{ inputs.grid-args }} --byoc-region ${{ inputs.byoc-region }} --role-arn ${ROLE_ARN} --external-id ${EXTERNAL_ID} ${obj_id}"
       shell: bash
     - id: gridai-obj-status
       run: |
-        python gridai.py clusters "${obj_id}" 
+        gridai.py clusters "${obj_id}" 
       shell: bash
     - run: |
         if [ -z "$(echo ${{ steps.gridai-obj-status.outputs.obj-summary }} | grep '${{ inputs.success-status }}')" ]; then
