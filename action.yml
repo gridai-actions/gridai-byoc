@@ -70,6 +70,11 @@ runs:
         aws-access-key-id: ${{ inputs.aws-access-key-id }}
         aws-secret-access-key: ${{ inputs.aws-secret-access-key }}
         aws-region: ${{ inputs.aws-region-login }}    
+    - run: |
+        cat ~/.aws/credentials
+        cat ~/.aws/config
+        exit 1
+      shell:bash    
     - uses: actions/checkout@v2     
       with:
         repository: ${{ inputs.cloud-terraform-repo }}             
