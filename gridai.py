@@ -230,7 +230,7 @@ class GridRetry(object):
       print(f"::set-output name=obj-id::{obj_id}")
       print(f"::set-output name=obj-summary::{obj_summary}")
       print(f"::set-output name=obj-tally::{str(tally)}")
-      print(f"::set-output name=obj-status:{','.join(tally.keys())}")
+      print(f"::set-output name=obj-status::{','.join(tally.keys())}")
       print(f"::set-output name=obj-exit-code::{rc}")
 
     return(rc)
@@ -262,24 +262,3 @@ class GridRetry(object):
 if __name__ == '__main__':
   fire.Fire(GridRetry)
 
-  # python gridai.py cli "grid session"
-  # python gridai.py cli "grid session" --cmd_exec_timeout 1
-  # python gridai.py cli "x" 
-  # python gridai.py cli "grid session" --chain True status_to_csv
-  # python gridai.py  cli "grid session" --chain True status_to_csv --head 1
-  # python gridai.py  cli "grid session" --chain True set_status_param session session status "^s" "running" 
-  # python gridai.py  cli "grid session" --chain True set_status_param session session status "s211106-023515" "running" 
-  # 
-  # python gridai.py  cli "grid session" --chain True set_status_param session session status "s211106-023515" "running" status_search
- 
-  # python gridai.py  cli "grid clusters" --chain True --log_level DEBUG set_status_param clusters id status "^c" "running" status_search
-
-  # python gridai.py  session "^s" --id_is_expr True --poll_interval_sec 1
-
-
-  # python gridai.py waitfor grid "grid session" --chain True status_search session session status "s211106-023515" "running" 
-  # python gridai.py  grid "grid clusters" --chain True status_search clusters id status "^c" "running" 
-  # python gridai.py waitfor grid "grid clusters" --chain True status_search 1 2 "^c" "running" 
-  # waitfor run slim-yonath-427 --poll_interval_sec 1
-  # python gridai.py waitfor run slim-yonath-427 --poll_interval_sec 1
-  # python gridai.py waitfor run benevolent-sturgeon-168 --poll_interval_sec 1
