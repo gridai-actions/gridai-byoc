@@ -46,4 +46,4 @@ jobs:
 # TODO: perform a session
 # TODO: perform a datastore
       - run:
-          grid delete cluster ${{ steps.gridai-obj-create.outputs.obj-id }} 
+          gridai.py "grid delete cluster ${{ steps.gridai-obj-create.outputs.obj-id }}"
