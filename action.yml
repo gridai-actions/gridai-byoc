@@ -91,7 +91,7 @@ runs:
         terraform apply -auto-approve
         terraform output -json > tf.output.json
       shell: bash
-        
+
     - id: gridai-obj-create
       run: |
         # cluster name
@@ -102,13 +102,15 @@ runs:
         export ROLE_ARN=$(cat tf.output.json | jq -r '.role_arn.value')
         if [ -z "${EXTERNAL_ID}" ]; then  echo "Error: EXTERNAL_ID is blank"; exit 1; fi
         if [ -z "${ROLE_ARN}" ]; then     echo "Error: ROLE_ARN is blank"; exit 1; fi
+        # mask EXTERNAL_ID and ROLE_ARN 
+        echo "::add-mask::${EXTERNAL_ID}"
+        echo "::add-mask::${ROLE_ARN}"
         # create cluster
-
         gridai.py cli "grid clusters ${{ inputs.cloud-provider }} ${{ inputs.grid-args }} --region ${{ inputs.byoc-region }} --role-arn ${ROLE_ARN} --external-id ${EXTERNAL_ID} ${obj_id}"
       shell: bash
     - id: gridai-obj-status
       run: |
-        gridai.py clusters "${obj_id}" 
+        gridai.py clusters "${obj_id} --min_all_match_cnt 4" 
       shell: bash
     - run: |
         if [ -z "$(echo ${{ steps.gridai-obj-status.outputs.obj-summary }} | grep '${{ inputs.success-status }}')" ]; then
