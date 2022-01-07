@@ -1,10 +1,23 @@
 name: 'Grid.ai BYOC Create'
 on:
+  workflow_dispatch:
   push:
     paths:
       - action.yml
       - .github/workflows/unittest.yml
 jobs:
+  prep-testbed:
+    needs: commit-lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - id: set-matrix
+        run: |
+          sudo apt-get install jq
+          echo "::set-output name=matrix::$(bash scripts/get-all-test-paths.sh)"
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+
   unittests:
     strategy:
       fail-fast: false
