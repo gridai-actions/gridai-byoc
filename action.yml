@@ -110,10 +110,10 @@ runs:
       shell: bash
     - id: gridai-obj-status
       run: |
-        gridai.py clusters "${obj_id} --min_all_match_cnt 4" 
+        gridai.py status_clus "${obj_id}" --min_all_match_cnt 3 --gha 
       shell: bash
     - run: |
-        if [ -z "$(echo ${{ steps.gridai-obj-status.outputs.obj-summary }} | grep '${{ inputs.success-status }}')" ]; then
+        if [ "${{ steps.gridai-obj-status.outputs.match-status }}" != "running" ]; then
           exit 1
         fi             
       shell: bash
