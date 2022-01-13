@@ -110,7 +110,8 @@ runs:
       shell: bash
     - id: gridai-obj-status
       run: |
-        gridai.py status_clus "${obj_id}" --min_all_match_cnt 3 --gha 
+        # failed can flipped to running.  check 3 times for flip flop.
+        gridai.py status_clus "${obj_id}" --min_all_match_cnt 3 --status3 "running|failed" --gha 
       shell: bash
     - run: |
         if [ "${{ steps.gridai-obj-status.outputs.match-status }}" != "running" ]; then
